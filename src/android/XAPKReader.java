@@ -7,6 +7,7 @@ import org.apache.cordova.CordovaWebView;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.Bundle;
 import android.net.Uri;
 
@@ -54,12 +55,29 @@ public class XAPKReader extends CordovaPlugin {
   
   cordova.getActivity().runOnUiThread (new Runnable() {
    @Override public void run () {
-    XAPKDownloaderActivity.cordovaActivity = cordova.getActivity(); // Workaround for Cordova/Crosswalk flickering status bar bug.
-    Context context = cordova.getActivity().getApplicationContext();
-    Intent intent = new Intent(context, XAPKDownloaderActivity.class);
-    intent.putExtras (bundle);
-    cordova.getActivity().startActivity (intent);
-   }
+    
+    // Add a possible initialization delay. (default 0)
+    int initializationDelay = preferences.getInteger("xapk_expansion_initialization_delay", 0);
+    
+    // Yes, there is some nasty code duplication here, but I am not sure what happens if initializationDelay is 0 and we use a Runnable. Will it equate to the same thing as no runnable? Not sure.
+    if (initializationDelay != 0) {
+     final Handler handler = new Handler();
+     handler.postDelayed(new Runnable() {
+     public void run() {
+      XAPKDownloaderActivity.cordovaActivity = cordova.getActivity(); // Workaround for Cordova/Crosswalk flickering status bar bug.
+      Context context = cordova.getActivity().getApplicationContext();
+      Intent intent = new Intent(context, XAPKDownloaderActivity.class);
+      intent.putExtras (bundle);
+      cordova.getActivity().startActivity (intent);
+     }
+    }, initializationDelay);
+    } else {
+     XAPKDownloaderActivity.cordovaActivity = cordova.getActivity(); // Workaround for Cordova/Crosswalk flickering status bar bug.
+     Context context = cordova.getActivity().getApplicationContext();
+     Intent intent = new Intent(context, XAPKDownloaderActivity.class);
+     intent.putExtras (bundle);
+     cordova.getActivity().startActivity (intent);
+    }
   });
   
   super.initialize (cordova, webView);
