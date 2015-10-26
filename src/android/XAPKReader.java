@@ -63,14 +63,14 @@ public class XAPKReader extends CordovaPlugin {
     if (initializationDelay != 0) {
      final Handler handler = new Handler();
      handler.postDelayed(new Runnable() {
-     public void run() {
-      XAPKDownloaderActivity.cordovaActivity = cordova.getActivity(); // Workaround for Cordova/Crosswalk flickering status bar bug.
-      Context context = cordova.getActivity().getApplicationContext();
-      Intent intent = new Intent(context, XAPKDownloaderActivity.class);
-      intent.putExtras (bundle);
-      cordova.getActivity().startActivity (intent);
-     }
-    }, initializationDelay);
+      public void run() {
+       XAPKDownloaderActivity.cordovaActivity = cordova.getActivity(); // Workaround for Cordova/Crosswalk flickering status bar bug.
+       Context context = cordova.getActivity().getApplicationContext();
+       Intent intent = new Intent(context, XAPKDownloaderActivity.class);
+       intent.putExtras (bundle);
+       cordova.getActivity().startActivity (intent);
+      }
+     }, initializationDelay);
     } else {
      XAPKDownloaderActivity.cordovaActivity = cordova.getActivity(); // Workaround for Cordova/Crosswalk flickering status bar bug.
      Context context = cordova.getActivity().getApplicationContext();
@@ -78,6 +78,7 @@ public class XAPKReader extends CordovaPlugin {
      intent.putExtras (bundle);
      cordova.getActivity().startActivity (intent);
     }
+   }
   });
   
   super.initialize (cordova, webView);
