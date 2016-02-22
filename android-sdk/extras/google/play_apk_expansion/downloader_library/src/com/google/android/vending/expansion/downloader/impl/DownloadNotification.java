@@ -25,8 +25,11 @@ import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.Context;
 import android.os.Messenger;
+
+import android.support.v4.app.NotificationCompat;
 
 /**
  * This class handles displaying the notification associated with the download
@@ -132,17 +135,25 @@ public class DownloadNotification implements IDownloaderClient {
             }
             mCurrentText = mContext.getString(stringDownloadID);
             mCurrentTitle = mLabel.toString();
-            mCurrentNotification.tickerText = mLabel + ": " + mCurrentText;
-            mCurrentNotification.icon = iconResource;
-            mCurrentNotification.setLatestEventInfo(mContext, mCurrentTitle, mCurrentText,
-                    mContentIntent);
+            //mCurrentNotification.tickerText = mLabel + ": " + mCurrentText;
+            //mCurrentNotification.icon = iconResource;
+            //mCurrentNotification.setLatestEventInfo(mContext, mCurrentTitle, mCurrentText,
+            //        mContentIntent);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
+            builder.setContentIntent(mContentIntent).setTicker(mLabel + ": " + mCurrentText).setSmallIcon(iconResource).setContentTitle(mCurrentTitle).setContentText(mCurrentText).build();
             if (ongoingEvent) {
-                mCurrentNotification.flags |= Notification.FLAG_ONGOING_EVENT;
+                builder.build().flags |= Notification.FLAG_ONGOING_EVENT;
+                //builder.setOngoing(true);
             } else {
-                mCurrentNotification.flags &= ~Notification.FLAG_ONGOING_EVENT;
-                mCurrentNotification.flags |= Notification.FLAG_AUTO_CANCEL;
+                builder.build().flags &= ~Notification.FLAG_ONGOING_EVENT;
+                //builder.setOngoing(true);
+                builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
+                //builder.setAutoCancel(true);
             }
-            mNotificationManager.notify(NOTIFICATION_ID, mCurrentNotification);
+            //PendingIntent notifyPendIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(), 0);
+            //builder.setContentIntent(notifyPendIntent);
+            mNotificationManager.notify(NOTIFICATION_ID, builder.build());
         }
     }
 
@@ -152,12 +163,14 @@ public class DownloadNotification implements IDownloaderClient {
         if (null != mClientProxy) {
             mClientProxy.onDownloadProgress(progress);
         }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
         if (progress.mOverallTotal <= 0) {
             // we just show the text
-            mNotification.tickerText = mCurrentTitle;
-            mNotification.icon = android.R.drawable.stat_sys_download;
-            mNotification.setLatestEventInfo(mContext, mLabel, mCurrentText, mContentIntent);
-            mCurrentNotification = mNotification;
+            //mNotification.tickerText = mCurrentTitle;
+            //mNotification.icon = android.R.drawable.stat_sys_download;
+            //mNotification.setLatestEventInfo(mContext, mLabel, mCurrentText, mContentIntent);
+            builder.setContentIntent(mContentIntent).setTicker(mCurrentTitle).setSmallIcon(android.R.drawable.stat_sys_download).setContentTitle(mCurrentTitle).setContentText(mCurrentText).build();
+            mCurrentNotification = builder.build();
         } else {
             mCustomNotification.setCurrentBytes(progress.mOverallProgress);
             mCustomNotification.setTotalBytes(progress.mOverallTotal);
