@@ -140,8 +140,16 @@ public class DownloadNotification implements IDownloaderClient {
             //mCurrentNotification.setLatestEventInfo(mContext, mCurrentTitle, mCurrentText,
             //        mContentIntent);
 
+            //Resources res = mContext.getResources();
             NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext);
             builder.setContentIntent(mContentIntent).setTicker(mLabel + ": " + mCurrentText).setSmallIcon(iconResource).setContentTitle(mCurrentTitle).setContentText(mCurrentText).build();
+            
+            Intent notificationIntent = new Intent(mContext, DownloadNotification.class);
+            mContext.startService(notificationIntent);
+            //PendingIntent mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
             if (ongoingEvent) {
                 builder.build().flags |= Notification.FLAG_ONGOING_EVENT;
                 //builder.setOngoing(true);
@@ -181,6 +189,11 @@ public class DownloadNotification implements IDownloaderClient {
             mCustomNotification.setTimeRemaining(progress.mTimeRemaining);
             mCurrentNotification = mCustomNotification.updateNotification(mContext);
         }
+        Intent notificationIntent = new Intent(mContext, DownloadNotification.class);
+        mContext.startService(notificationIntent);
+        //PendingIntent mContentIntent = PendingIntent.getActivity(mContext, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(NOTIFICATION_ID, mCurrentNotification);
     }
 
