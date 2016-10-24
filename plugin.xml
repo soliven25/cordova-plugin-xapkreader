@@ -7,6 +7,13 @@
  <keywords>cordova,apk,expansion,file,xapk,expansion file reader,xapk reader,xapkreader,android,agamemnus,flyingsoftgames</keywords>
  <engines><engine name="cordova" version=">=6.0.0" /></engines>
  
+ <preference name="GOOGLE_PLAY_PUBLIC_KEY" default="YOUR_GOOGLE_PLAY_LICENSE_KEY" />
+ <preference name="EXPANSION_AUTHORITY" default="$PACKAGE_NAME.expansion" />
+ <preference name="MAIN_FILE_VERSION" default="0" />
+ <preference name="PATCH_FILE_VERSION" default="0" />
+ <preference name="MAIN_FILE_SIZE" default="0" />
+ <preference name="PATCH_FILE_SIZE" default="0" />
+
  <platform name="android">
   <framework src="build.gradle" custom="true" type="gradleReference" />
   <config-file target="res/xml/config.xml" parent="/*">
@@ -14,21 +21,22 @@
     <param name="android-package" value="com.flyingsoftgames.xapkreader.XAPKReader"/>
     <param name="onload" value="true" />
    </feature>
+   <allow-navigation href="content:*" />
   </config-file>
   
-  <source-file src="res/values/xapkreader.xml" target-dir="res/values" />
+  <resource-file src="res/values/xapkreader.xml" target="res/values" />
   <config-file target="res/values/xapkreader.xml" parent="/*">
-   <string name="xapk_expansion_authority">com.test.expansion</string>
-   <string name="xapk_google_play_public_key">YOUR_GOOGLE_PLAY_LICENSE_KEY</string>
+   <string name="xapk_expansion_authority">$EXPANSION_AUTHORITY</string>
+   <string name="xapk_google_play_public_key">$GOOGLE_PLAY_PUBLIC_KEY</string>
    <string name="xapk_text_downloading_assets">Downloading assets…</string>
    <string name="xapk_text_preparing_assets">Preparing assets…</string>
    <string name="xapk_text_download_failed">Download failed.</string>
    <string name="xapk_text_error">Error.</string>
    <string name="xapk_text_close">Close.</string>
-   <integer name="xapk_main_version">0</integer>
-   <integer name="xapk_patch_version">0</integer>
-   <integer name="xapk_main_file_size">0</integer>
-   <integer name="xapk_patch_file_size">0</integer>
+   <integer name="xapk_main_version">$MAIN_FILE_VERSION</integer>
+   <integer name="xapk_patch_version">$PATCH_FILE_VERSION</integer>
+   <integer name="xapk_main_file_size">$MAIN_FILE_SIZE</integer>
+   <integer name="xapk_patch_file_size">$PATCH_FILE_SIZE</integer>
   </config-file>
   
   <source-file src="src/android/XAPKAlarmReceiver.java"      target-dir="src/com/flyingsoftgames/xapkreader" />
@@ -59,7 +67,7 @@
    </activity>
    <service android:name="com.flyingsoftgames.xapkreader.XAPKDownloaderService" />
    <receiver android:name="com.flyingsoftgames.xapkreader.XAPKAlarmReceiver" />
-   <provider android:authorities="@string/xapk_expansion_authority" android:exported="false" android:multiprocess="true" android:name="com.flyingsoftgames.xapkreader.XAPKProvider" />
+   <provider android:authorities="$EXPANSION_AUTHORITY" android:exported="false" android:multiprocess="true" android:name="com.flyingsoftgames.xapkreader.XAPKProvider" />
   </config-file>
   
   <info> See the README.md file to complete your installation.</info>
