@@ -5,12 +5,10 @@
  <author>Michael Romanovsky</author>
  <license>MIT (see readme.md)</license>
  <keywords>cordova,apk,expansion,file,xapk,expansion file reader,xapk reader,xapkreader,android,agamemnus,flyingsoftgames</keywords>
- <engines><engine name="cordova" version=">=4.1.1" /></engines>
+ <engines><engine name="cordova" version=">=6.0.0" /></engines>
  
  <platform name="android">
-  
-  <dependency id="com.google.play.services" />
-  
+  <framework src="build.gradle" custom="true" type="gradleReference" />
   <config-file target="res/xml/config.xml" parent="/*">
    <feature name="XAPKReader">
     <param name="android-package" value="com.flyingsoftgames.xapkreader.XAPKReader"/>
@@ -40,10 +38,7 @@
   <source-file src="src/android/XAPKProvider.java"           target-dir="src/com/flyingsoftgames/xapkreader" />
   <source-file src="src/android/XAPKReader.java"             target-dir="src/com/flyingsoftgames/xapkreader" />
   <source-file src="src/android/XAPKZipResourceFile.java"    target-dir="src/com/flyingsoftgames/xapkreader" />
-  
-  <framework src="android-sdk/extras/google/play_apk_expansion/downloader_library" custom="true"/>
-  <framework src="android-sdk/extras/google/play_licensing/library" custom="true" />
-  
+
   <config-file target="AndroidManifest.xml" parent="/manifest">
    <!-- Required to download files from Google Play -->
    <uses-permission android:name="android.permission.INTERNET" />
