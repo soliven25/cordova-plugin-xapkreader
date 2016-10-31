@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.net.Uri;
 
 public class XAPKReader extends CordovaPlugin {
- @Override public void initialize (final CordovaInterface cordova, CordovaWebView webView) {
+ @Override public void initialize (final CordovaInterface cordova, final CordovaWebView webView) {
   String packageName = cordova.getActivity().getPackageName();
   final Bundle bundle = new Bundle ();
   
@@ -54,7 +54,14 @@ public class XAPKReader extends CordovaPlugin {
   
   cordova.getActivity().runOnUiThread (new Runnable() {
    @Override public void run () {
-    XAPKDownloaderActivity.cordovaActivity = cordova.getActivity(); // Workaround for Cordova/Crosswalk flickering status bar bug.
+
+    // Workaround for Cordova/Crosswalk flickering status bar bug.
+    XAPKDownloaderActivity.cordovaActivity = cordova.getActivity();
+
+    // Provide webview to Downloader Activity so it can trigger a page
+    // reload once the expansion is downloaded.
+    XAPKDownloaderActivity.cordovaWebView = webView;
+
     Context context = cordova.getActivity().getApplicationContext();
     Intent intent = new Intent(context, XAPKDownloaderActivity.class);
     intent.putExtras (bundle);
