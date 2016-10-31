@@ -24,7 +24,7 @@
    <allow-navigation href="content:*" />
   </config-file>
   
-  <resource-file src="res/values/xapkreader.xml" target="res/values" />
+  <resource-file src="res/values/xapkreader.xml" target="res/values/xapkreader.xml" />
   <config-file target="res/values/xapkreader.xml" parent="/*">
    <string name="xapk_expansion_authority">$EXPANSION_AUTHORITY</string>
    <string name="xapk_google_play_public_key">$GOOGLE_PLAY_PUBLIC_KEY</string>
